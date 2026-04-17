@@ -1,6 +1,6 @@
 # Spanish translation for project_timemoney
 # Copyright (C) Flinq Ingeniería
-# This file is distributed under the LGPL-3 license.
+# This file is distributed under the AGPL-3 license.
 #
 msgid ""
 msgstr ""
@@ -27,16 +27,6 @@ msgid "Sum of hours logged in timesheets for this project"
 msgstr "Suma de horas imputadas en partes de trabajo del proyecto"
 
 #. module: project_timemoney
-#: view:project.project:project_timemoney.project_project_view_form_zverp
-msgid "Hours"
-msgstr "Horas"
-
-#. module: project_timemoney
-#: view:project.project:project_timemoney.project_project_view_form_zverp
-msgid "Gross Margin"
-msgstr "Margen bruto"
-
-#. module: project_timemoney
 #: model:ir.model.fields,field_description:project.project,project_budget
 msgid "Budget"
 msgstr "Presupuesto"
@@ -45,3 +35,18 @@ msgstr "Presupuesto"
 #: model:ir.model.fields,help:project.project,project_budget
 msgid "Untaxed amount of the sale order linked to this project"
 msgstr "Importe sin impuestos del pedido de venta vinculado al proyecto"
+
+#. module: project_timemoney
+#: model:ir.ui.view,arch_db:project_timemoney.project_project_view_form_zverp
+msgid "Hours"
+msgstr "Horas"
+
+#. module: project_timemoney
+#: model:ir.ui.view,arch_db:project_timemoney.project_project_view_form_zverp
+msgid "Gross Margin"
+msgstr "Margen bruto"
+
+#. module: project_timemoney
+#: model:ir.ui.view,arch_db:project_timemoney.project_project_view_form_zverp
+msgid "Budget"
+msgstr "Presupuesto"
