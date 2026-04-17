@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Formulario: botones estadísticos en button_box ── -->
+    <record id="project_project_view_form_zverp" model="ir.ui.view">
+        <field name="name">project.project.form.zverp</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+
+                <!-- Total de horas imputadas en partes de trabajo -->
+                <button class="oe_stat_button"
+                        name="action_project_timesheets"
+                        type="object"
+                        icon="fa-clock-o"
+                        groups="hr_timesheet.group_hr_timesheet_user"
+                        attrs="{'invisible': [('allow_timesheets', '=', False)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="zverp_total_hours" nolabel="1" widget="float_time"/>
+                        </span>
+                        <span class="o_stat_text">Horas</span>
+                    </div>
+                </button>
+
+                <!-- Rendimiento de la cuenta analítica (ingresos − gastos) -->
+                <button class="oe_stat_button"
+                        name="action_open_analytic_lines"
+                        type="object"
+                        icon="fa-line-chart"
+                        groups="analytic.group_analytic_accounting"
+                        attrs="{'invisible': [('analytic_account_id', '=', False)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="analytic_account_balance" nolabel="1" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">Rendimiento</span>
+                    </div>
+                </button>
+
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ── Vista lista/árbol: columnas opcionales ── -->
+    <record id="project_project_view_tree_zverp" model="ir.ui.view">
+        <field name="name">project.project.tree.zverp</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_account_id']" position="after">
+                <field name="zverp_total_hours"
+                       string="Total Horas"
+                       widget="float_time"
+                       optional="show"
+                       groups="hr_timesheet.group_hr_timesheet_user"/>
+                <field name="analytic_account_balance"
+                       string="Rendimiento"
+                       widget="monetary"
+                       optional="show"
+                       groups="analytic.group_analytic_accounting"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
