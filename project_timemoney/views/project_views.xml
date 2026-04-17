@@ -18,9 +18,9 @@
                         attrs="{'invisible': [('allow_timesheets', '=', False)]}">
                     <div class="o_field_widget o_stat_info">
                         <span class="o_stat_value">
-                            <field name="zverp_total_hours" nolabel="1" widget="float_time"/>
+                            <field name="project_total_hours" nolabel="1" widget="float_time"/>
                         </span>
-                        <span class="o_stat_text">Horas</span>
+                        <span class="o_stat_text">Hours</span>
                     </div>
                 </button>
 
@@ -35,7 +35,7 @@
                         <span class="o_stat_value">
                             <field name="analytic_account_balance" nolabel="1" widget="monetary"/>
                         </span>
-                        <span class="o_stat_text">Rendimiento</span>
+                        <span class="o_stat_text">Gross Margin</span>
                     </div>
                 </button>
 
@@ -50,7 +50,7 @@
         <field name="inherit_id" ref="project.view_project"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='analytic_account_id']" position="after">
-                <field name="zverp_total_hours"
+                <field name="project_total_hours"
                        string="Total Horas"
                        widget="float_time"
                        optional="show"
