@@ -7,6 +7,14 @@ class ProjectProject(models.Model):
     # store=True to allow sorting in list view
     analytic_account_balance = fields.Monetary(store=True)
 
+    project_budget = fields.Monetary(
+        string='Budget',
+        related='sale_order_id.amount_untaxed',
+        store=True,
+        readonly=True,
+        help='Untaxed amount of the sale order linked to this project',
+    )
+
     project_total_hours = fields.Float(
         string='Total Hours',
         compute='_compute_project_total_hours',

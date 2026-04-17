@@ -35,3 +35,13 @@ msgstr "Horas"
 #: view:project.project:project_timemoney.project_project_view_form_zverp
 msgid "Gross Margin"
 msgstr "Margen bruto"
+
+#. module: project_timemoney
+#: model:ir.model.fields,field_description:project.project,project_budget
+msgid "Budget"
+msgstr "Presupuesto"
+
+#. module: project_timemoney
+#: model:ir.model.fields,help:project.project,project_budget
+msgid "Untaxed amount of the sale order linked to this project"
+msgstr "Importe sin impuestos del pedido de venta vinculado al proyecto"

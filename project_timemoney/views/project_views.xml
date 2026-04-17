@@ -39,6 +39,22 @@
                     </div>
                 </button>
 
+
+                <!-- Budget: untaxed amount of the linked sale order -->
+                <button class="oe_stat_button"
+                        name="action_view_sos"
+                        type="object"
+                        icon="fa-money"
+                        groups="sales_team.group_sale_salesman"
+                        attrs="{'invisible': [('sale_order_id', '=', False)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="project_budget" nolabel="1" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">Budget</span>
+                    </div>
+                </button>
+
             </xpath>
         </field>
     </record>
@@ -60,6 +76,11 @@
                        widget="monetary"
                        optional="show"
                        groups="analytic.group_analytic_accounting"/>
+                <field name="project_budget"
+                       string="Budget"
+                       widget="monetary"
+                       optional="show"
+                       groups="sales_team.group_sale_salesman"/>
             </xpath>
         </field>
     </record>
