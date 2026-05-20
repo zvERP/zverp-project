@@ -7,14 +7,12 @@ class ProjectProject(models.Model):
     # store=True to allow sorting in list view
     analytic_account_balance = fields.Monetary(
         related='analytic_account_id.balance',
-        store=True,
     )
 
     project_total_hours = fields.Float(
         string='Total Hours',
         compute='_compute_project_total_hours',
         compute_sudo=True,
-        store=True,
         help='Sum of hours logged in timesheets for this project',
     )
 
@@ -22,7 +20,6 @@ class ProjectProject(models.Model):
         string='Budget',
         compute='_compute_project_budget',
         compute_sudo=True,
-        store=True,
         help='Untaxed amount of the sale order linked to this project',
     )
 
