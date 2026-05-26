@@ -42,7 +42,7 @@
 
                 <!-- Budget: untaxed amount of the sale order sharing the analytic account -->
                 <button class="oe_stat_button"
-                        name="action_view_sos"
+                        name="action_view_confirmed_budgets"
                         type="object"
                         icon="fa-money"
                         attrs="{'invisible': [('analytic_account_id', '=', False)]}">

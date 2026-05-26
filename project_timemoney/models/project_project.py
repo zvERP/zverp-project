@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class ProjectProject(models.Model):
@@ -36,19 +36,15 @@ class ProjectProject(models.Model):
 
     @api.depends('analytic_account_id')
     def _compute_project_budget(self):
-        analytic_ids = self.filtered('analytic_account_id').mapped('analytic_account_id').ids
-        mapped = {}
-        if analytic_ids:
-            data = self.env['sale.order'].read_group(
-                [('analytic_account_id', 'in', analytic_ids), ('state', '!=', 'cancel')],
-                ['analytic_account_id', 'amount_untaxed'],
-                ['analytic_account_id'],
-            )
-            mapped = {d['analytic_account_id'][0]: d['amount_untaxed'] for d in data}
         for project in self:
-            project.project_budget = mapped.get(
-                project.analytic_account_id.id, 0.0
-            ) if project.analytic_account_id else 0.0
+            confirmed_orders = project._get_project_sale_orders().filtered(
+                lambda so: so.state in ('sale', 'done')
+            )
+            project.project_budget = sum(confirmed_orders.mapped('amount_untaxed'))
+
+    def _get_project_sale_orders(self):
+        self.ensure_one()
+        return (self.sale_order_id | self.task_ids.sale_order_id)
 
     def action_open_analytic_lines(self):
         self.ensure_one()
@@ -62,4 +58,15 @@ class ProjectProject(models.Model):
             'search_default_group_date': 1,
             'default_account_id': analytic_id,
         }
+        return action
+
+    def action_view_confirmed_budgets(self):
+        self.ensure_one()
+        confirmed_orders = self._get_project_sale_orders().filtered(
+            lambda so: so.state in ('sale', 'done')
+        )
+        action = self.env['ir.actions.act_window']._for_xml_id('sale.action_orders')
+        action['name'] = _("%(name)s's Confirmed Budgets", name=self.name)
+        action['domain'] = [('id', 'in', confirmed_orders.ids)]
+        action['context'] = {'create': False}
         return action
