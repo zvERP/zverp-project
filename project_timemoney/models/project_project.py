@@ -3,6 +3,7 @@ from odoo import models, fields, api, _
 
 class ProjectProject(models.Model):
     _inherit = 'project.project'
+    _BUDGET_SALE_STATES = ('sale', 'done')
 
     # store=True to allow sorting in list view
     analytic_account_balance = fields.Monetary(
@@ -37,14 +38,25 @@ class ProjectProject(models.Model):
     @api.depends('analytic_account_id')
     def _compute_project_budget(self):
         for project in self:
-            confirmed_orders = project._get_project_sale_orders().filtered(
-                lambda so: so.state in ('sale', 'done')
-            )
-            project.project_budget = sum(confirmed_orders.mapped('amount_untaxed'))
+            budget_orders = project._get_project_budget_orders()
+            project.project_budget = sum(budget_orders.mapped('amount_untaxed'))
 
     def _get_project_sale_orders(self):
         self.ensure_one()
-        return (self.sale_order_id | self.task_ids.sale_order_id)
+        sale_order_model = self.env['sale.order']
+        # Preferred path: budgets linked through the project's analytic account.
+        if self.analytic_account_id and 'analytic_account_id' in sale_order_model._fields:
+            return sale_order_model.search(
+                [('analytic_account_id', '=', self.analytic_account_id.id)]
+            )
+        # Compatibility fallback for databases without analytic link on sale.order.
+        return self.sale_order_id | self.task_ids.sale_order_id
+
+    def _get_project_budget_orders(self):
+        self.ensure_one()
+        return self._get_project_sale_orders().filtered(
+            lambda so: so.state in self._BUDGET_SALE_STATES
+        )
 
     def action_open_analytic_lines(self):
         self.ensure_one()
@@ -62,11 +74,12 @@ class ProjectProject(models.Model):
 
     def action_view_confirmed_budgets(self):
         self.ensure_one()
-        confirmed_orders = self._get_project_sale_orders().filtered(
-            lambda so: so.state in ('sale', 'done')
-        )
+        confirmed_orders = self._get_project_budget_orders()
         action = self.env['ir.actions.act_window']._for_xml_id('sale.action_orders')
         action['name'] = _("%(name)s's Confirmed Budgets", name=self.name)
-        action['domain'] = [('id', 'in', confirmed_orders.ids)]
+        action['domain'] = [
+            ('id', 'in', confirmed_orders.ids),
+            ('state', 'in', self._BUDGET_SALE_STATES),
+        ]
         action['context'] = {'create': False}
         return action
